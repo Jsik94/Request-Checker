@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Console</title>
+    <style>
+        body {
+            font-family: monospace;
+            background-color: black;
+            color: lime;
+            padding: 20px;
+        }
+        #console {
+            width: 100%;
+            height: 90vh;
+            overflow-y: auto;
+            background-color: black;
+            color: lime;
+            border: 1px solid #00FF00;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="console"></div>
+
+    <script>
+        const consoleDiv = document.getElementById("console");
+
+        const ws = new WebSocket(`ws://${window.location.host}/ws`);
+
+        ws.onmessage = function(event) {
+            const newMessage = document.createElement("div");
+            newMessage.textContent = event.data;
+            consoleDiv.appendChild(newMessage);
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        };
+
+        ws.onclose = function() {
+            const closeMessage = document.createElement("div");
+            closeMessage.textContent = "WebSocket connection closed.";
+            consoleDiv.appendChild(closeMessage);
+        };
+    </script>
+</body>
+</html>
